@@ -99,7 +99,7 @@ class BingoCog(commands.Cog):
     async def start_game(self, ctx):
 
         # Verify command is only coming from DM and command channel
-        if ctx.author.id != self.dungeon_master or ctx.channel.id != self.game_channel.id:
+        if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
             return
 
         # Start the game only if it's in pre-game state
@@ -107,7 +107,7 @@ class BingoCog(commands.Cog):
             self.bot.game_save.save_attr(game_state=1)
             await self.game_channel.send("The game has started. No more selections can be made.")
             board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, self.bot.game_save.current_board)
-            await ctx.send(board_str)
+            await self.game_channel.send(board_str)
         else:
             await ctx.send("The game has already started. Use !reset_board to start a new game.")
 
@@ -119,7 +119,7 @@ class BingoCog(commands.Cog):
             return
 
         # get current bingo board
-        board = self.get_current_board()
+        board = self.bot.bingo_helper.get_current_board()
         if board is None:
             return
 
