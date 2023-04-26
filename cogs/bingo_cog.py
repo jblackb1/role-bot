@@ -125,14 +125,15 @@ class BingoCog(commands.Cog):
 
         # set added square to black square emoji to indicate a selection
         board[row - 1][col - 1] = ':black_large_square:'
-        board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, board)
-        await self.game_channel.send(board_str)
 
         winning_user_ids = self.bot.bingo_helper.check_winners(board, self.bingo_size)
         for id in winning_user_ids:
             if id is not None:
                 winning_user = ctx.guild.get_member(id)
                 await self.game_channel.send(f'{winning_user.mention} has won!')
+
+        board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, board)
+        await self.game_channel.send(board_str)
 
         self.bot.game_save.save_attr(current_board=board)
 
