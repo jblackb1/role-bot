@@ -2,22 +2,22 @@
 DND BINGO!
 
 RULES:
-Only the DM can see the board contents. The squares are filled from the bingo_squares.py file and are events that can occur throughout a PF2E playthrough.
-Each player at the beginning of the session selects a row and column.
-If their row or column fills up before the end of the session, they win!
-This allows for multiple winners. You decide the prize. (hero point or something in game or a candy bar idk)
-That's it!
+- Only the DM can see the board contents. The squares are filled from the bingo_squares.py file and are events that can occur throughout a PF2E playthrough.
+- Each player at the beginning of the session selects a row and column.
+- If their row or column fills up before the end of the session, they win!
+- This allows for multiple winners. You decide the prize. (hero point or something in game or a candy bar idk)
+- That's it!
 
 SETUP:
-pip install discord.py
-copy bingo_config_example.py to bingo_config.py
-create 3 new channels in your discord server:
-  One for the board display and player row/col selections.
-  One for bingo board contents (should be private to only dungeon master and the bot)
-  One for commands from DM like filling squares, starting/resetting game (should be private to only dungeon master and the bot)
+- pip install discord.py
+- copy bingo_config_example.py to bingo_config.py
+- create 3 new channels in your discord server:
+  - One for the board display and player row/col selections.
+  - One for bingo board contents (should be private to only dungeon master and the bot)
+  - One for commands from DM like filling squares, starting/resetting game (should be private to only dungeon master and the bot)
 
 BOT PERMISSIONS:
-  add here...
+  - add here...
   
 COMMANDS:
 - !select [initials] [row] [column]: Register your selection during pre-game.
