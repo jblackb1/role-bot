@@ -1,8 +1,4 @@
 __pycache__
-/bot/__pycache__/*
-/bot/cogs/__pycache__/*
-/bot/bingo/__pycache__/*
-/bot/config/__pycache__/*
 bingo_config.py
 bingo_board.jpg
 game_save.pkl
