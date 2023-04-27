@@ -1,0 +1,5 @@
+__pycache__/*
+cogs/__pycache__/*
+bingo_config.py
+bingo_board.jpg
+game_save.pkl
