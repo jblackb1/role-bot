@@ -1,11 +1,15 @@
 # role-bot
-DND BINGO!
+DND BINGO! The blind bingo game where your actions fill in the board.
+
+## TECHNOLOGIES
+This is a discord bot that you can add to your server by entering an API token into the config/bingo_config.py file
+Python 3.10.11
 
 ## RULES:
-- Only the DM can see the board contents. The squares are filled from the bingo_squares.py file and are events that can occur throughout a PF2E playthrough.
+- Only the DM can see the board contents. The squares are filled from the list in bingo_squares.py file and are events that can occur throughout a DND/PF2E playthrough. Feel free to add your own here when you clone the repository. Be specific to your party if you want even more fun.
 - Each player at the beginning of the session selects a row and column.
 - If their row or column fills up before the end of the session, they win!
-- This allows for multiple winners. You decide the prize. (hero point or something in game or a candy bar idk)
+- This allows for multiple winners. You decide the prize. (hero point or something in game or a candy bar idk :) )
 - That's it!
 
 ## SETUP:
