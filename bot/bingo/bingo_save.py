@@ -2,7 +2,7 @@ import os
 import pickle
 
 class GameSave:
-    def __init__(self, save_file="game_save.pkl"):
+    def __init__(self, save_file="../game_save.pkl"):
         self.save_file = save_file
 
         # If the save file exists, load the game data

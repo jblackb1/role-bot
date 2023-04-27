@@ -1,6 +1,6 @@
 from discord.ext import commands
-from ..bingo.bingo_save import GameSave
-from ..bingo.bingo_helper import BingoHelper
+from bingo.bingo_save import GameSave
+from bingo.bingo_helper import BingoHelper
 
 
 class RoleBot(commands.Bot):

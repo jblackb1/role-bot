@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 class BingoHelper:
-    def __init__(self, bot, filename='bingo_board.jpg', font_path = 'C:\\Windows\\Fonts\\courbd.ttf'):
+    def __init__(self, bot, filename='../bingo_board.jpg', font_path = 'C:\\Windows\\Fonts\\courbd.ttf'):
         self.bot = bot
         self.filename = filename
         self.font_path = font_path
