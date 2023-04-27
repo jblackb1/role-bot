@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
-from ..bingo.bingo_squares import bingo_squares
-from ..config.bingo_config import COMMAND_CHANNEL_ID, GAME_CHANNEL_ID, BOARD_CHANNEL_ID, DUNGEON_MASTER, BINGO_SIZE
+from bingo.bingo_squares import bingo_squares
+from config.bingo_config import COMMAND_CHANNEL_ID, GAME_CHANNEL_ID, BOARD_CHANNEL_ID, DUNGEON_MASTER, BINGO_SIZE
 
 
 class BingoCog(commands.Cog):
