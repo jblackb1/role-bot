@@ -2,7 +2,7 @@ import os
 import asyncio
 import discord
 from role_bot import RoleBot
-from bingo_config import APIKEY
+from config.bingo_config import APIKEY
 
 intents = discord.Intents.default()
 intents.members = True
