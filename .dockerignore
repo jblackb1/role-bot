@@ -23,6 +23,7 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+bot/config/
 LICENSE
 README.md
 CODE_OF_CONDUCT.md
