@@ -60,6 +60,13 @@ class BingoCog(commands.Cog):
         if len(initials) != 2:
             await ctx.send(f'<@{ctx.author.id}>: Initials must be exactly 2 characters.')
             return
+        
+        # Check if the row and column have already been selected
+        existing_selections = self.bot.game_save.selections
+        for user_id, existing_selection in existing_selections.items():
+            if existing_selection['row'] == row - 1 or existing_selection['col'] == col - 1:
+                await ctx.send(f'<@{ctx.author.id}>: This row or column has already been selected by another player.')
+                return
 
         member = ctx.guild.get_member(ctx.author.id)
         if member is not None:
