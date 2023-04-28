@@ -1,4 +1,4 @@
 __pycache__
-bingo_config.py
+bot/config/bingo_config.yaml
 bingo_board.jpg
 game_save.pkl
