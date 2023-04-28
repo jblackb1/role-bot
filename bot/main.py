@@ -1,8 +1,9 @@
 import os
+import sys
+import yaml
 import asyncio
 import discord
 import logging
-import sys
 
 # Initialize logger
 logger = logging.getLogger()
@@ -14,7 +15,18 @@ stdout_handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(leveln
 logger.addHandler(stdout_handler)
 
 from role_bot import RoleBot
-from config.bingo_config import APIKEY
+
+def load_config(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+
+# Get the base directory and construct the path to the config.yaml file
+base_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(base_dir, 'config', 'bingo_config.yaml')
+
+config = load_config(config_path)
+
+API_KEY = config["API_KEY"]
 
 intents = discord.Intents.default()
 intents.members = True
@@ -29,7 +41,7 @@ async def load(bot):
 async def main(bot):
     logger.info("RoleBot starting...")
     await load(bot)
-    await bot.start(APIKEY)
+    await bot.start(API_KEY)
 
 if __name__ == "__main__":
     bot = RoleBot(intents=intents, command_prefix="!")

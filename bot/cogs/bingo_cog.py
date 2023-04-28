@@ -1,11 +1,38 @@
+import os
+import yaml
 import logging
+import discord
+from discord.ext import commands
 
 logger = logging.getLogger(__name__)
 
-import discord
-from discord.ext import commands
-from bingo.bingo_squares import bingo_squares
-from config.bingo_config import COMMAND_CHANNEL_ID, GAME_CHANNEL_ID, BOARD_CHANNEL_ID, DUNGEON_MASTER, BINGO_SIZE
+def load_bingo_squares():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    bingo_squares_file = os.path.join(base_dir, '..', 'config', 'bingo_squares.yaml')
+
+    with open(bingo_squares_file, 'r') as file:
+        bingo_squares = yaml.safe_load(file)
+
+    return bingo_squares
+
+def load_config(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+
+# Get the base directory and construct the path to the config.yaml file
+base_dir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(base_dir, '..', 'config', 'bingo_config.yaml')
+
+config = load_config(config_path)
+
+# Now you can access the config values like this:
+dungeon_master = config['DUNGEON_MASTER']
+command_channel_id = config['COMMAND_CHANNEL_ID']
+board_channel_id = config['BOARD_CHANNEL_ID']
+game_channel_id = config['GAME_CHANNEL_ID']
+bingo_size = config['BINGO_SIZE']
+
+bingo_squares = load_bingo_squares()
 
 
 class BingoCog(commands.Cog):
@@ -47,7 +74,7 @@ class BingoCog(commands.Cog):
             - !start_game: Start the game. Selection not allowed after this point (DM only).
             - !add_square [row] [column]: Add a square to the board (DM only).
             - !remove_square [row] [column]: Remove a square from the board (DM only).
-            - !reset_board: Reset the board and user selections (DM only)."""
+            - !reset_game: Reset the board and user selections (DM only)."""
 
             try:
                 logger.debug('Sending commands info to GM channel and pinning the message.')
@@ -122,7 +149,7 @@ class BingoCog(commands.Cog):
             await self.game_channel.send(board_str)
             self.bot.game_save.save_attr(current_board=board)
 
-            logger.info('Setting up new Bingo game')
+            logger.info('Setting up new Bingo game.')
 
         except Exception as error:
             logger.error(error, exc_info=True)
@@ -142,7 +169,7 @@ class BingoCog(commands.Cog):
                 await self.game_channel.send(board_str)
                 logger.info('Starting the Bingo game now')
             else:
-                await ctx.send("The game has already started. Use !reset_board to start a new game.")
+                await ctx.send("The game has already started. Use !reset_game to start a new game.")
                 logger.info('User attempted to start the game while it was already started. Doing nothing.')
 
         except Exception as error:
@@ -204,7 +231,7 @@ class BingoCog(commands.Cog):
             logger.error(error)
 
     @commands.command()
-    async def reset_board(self, ctx):
+    async def reset_game(self, ctx):
         try:
             # verify command is only coming from DM and command channel
             if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
@@ -219,9 +246,9 @@ class BingoCog(commands.Cog):
             # Clear user selections and winners
             self.bot.game_save.reset()
 
-            await ctx.send("The bingo board and user selections have been reset. You can start a new game using !create_board.")
+            await ctx.send("The bingo board and user selections have been reset. You can start a new game using !setup_game.")
         except Exception as error:
             logger.error(error)
 
 async def setup(bot):
-    await bot.add_cog(BingoCog(bot, COMMAND_CHANNEL_ID, GAME_CHANNEL_ID, BOARD_CHANNEL_ID, DUNGEON_MASTER, BINGO_SIZE, bingo_squares))
+    await bot.add_cog(BingoCog(bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size, bingo_squares))
