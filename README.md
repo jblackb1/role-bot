@@ -13,8 +13,8 @@ Python 3.10.11
 - That's it!
 
 ## Prerequisites
-Docker installed on your machine. You can download and install Docker from the [official website](https://www.docker.com/products/docker-desktop/).
-A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications).
+- Docker installed on your machine. You can download and install Docker from the [official website](https://www.docker.com/products/docker-desktop/).
+- A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications).
 
 ## Quickstart
 ### 1. Pull the Docker image
