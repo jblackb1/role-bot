@@ -1,12 +1,23 @@
+import os
 import random
 import textwrap
 from PIL import Image, ImageDraw, ImageFont
 
 
 class BingoHelper:
-    def __init__(self, bot, filename='../bingo_board.jpg', font_path = 'C:\\Windows\\Fonts\\courbd.ttf'):
+    def __init__(self, bot, imagepath=None, font_path=None):
         self.bot = bot
-        self.filename = filename
+
+        if imagepath is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            print(base_dir + __file__)
+            imagepath = os.path.join(base_dir, '..', '..', 'data', 'bingo_board.jpg')
+        
+        if font_path is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            font_path = os.path.join(base_dir, '..', '..', 'data', 'COURBD.TTF')
+
+        self.imagepath = imagepath
         self.font_path = font_path
 
     def generate_bingo_board(self, squares):
@@ -39,7 +50,8 @@ class BingoHelper:
                 d.rectangle([(x, y), (x + cell_width, y + cell_height)], outline='black')
                 self.draw_text(d, square, font, (x + padding, y + padding), max_width=25)
 
-        img.save(self.filename)
+        img.save(self.imagepath)
+        return self.imagepath
 
     async def get_board_display(self, ctx, board):
         # Format the board string
