@@ -13,8 +13,8 @@ Python 3.10.11
 - That's it!
 
 ## Prerequisites
-Docker installed on your machine. You can download and install Docker from the official website.
-A Discord bot token from the Discord Developer Portal.
+Docker installed on your machine. You can download and install Docker from the [official website](https://www.docker.com/products/docker-desktop/).
+A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications).
 
 ## Quickstart
 ### 1. Pull the Docker image
@@ -68,4 +68,4 @@ Replace /path/to/your/config/folder with the path to the folder you created in s
 - !start_game: Start the game. Selection not allowed after this point (DM only).
 - !add_square [row] [column]: Add a square to the board (DM only).
 - !remove_square [row] [column]: Remove a square from the board (DM only).
-- !reset_board: Reset the board and user selections (DM only).
+- !reset_game: Reset the board and user selections (DM only).
