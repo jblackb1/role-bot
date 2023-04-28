@@ -29,9 +29,8 @@ config = load_config(config_path)
 API_KEY = config["API_KEY"]
 
 intents = discord.Intents.default()
-intents.members = True
-intents.presences = True
 intents.message_content = True
+intents.members = True
 
 async def load(bot):
     for filename in os.listdir('./bot/cogs'):
