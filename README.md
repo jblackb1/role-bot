@@ -15,6 +15,7 @@ Python 3.10.11
 ## Prerequisites
 - Docker installed on your machine. You can download and install Docker from the [official website](https://www.docker.com/products/docker-desktop/).
 - A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications).
+- Create 3 new channels on your discord server. One for the gameplay that all players can see, one for the bingo board image of the contents in each square, and one for DM commands.
 
 ## Quickstart
 ### 1. Pull the Docker image
@@ -61,6 +62,10 @@ Replace /path/to/your/config/folder with the path to the folder you created in s
   - Read Messages: To receive commands from users
   - Send Messages: To send messages and respond to commands
   - Attach Files: To generate and send Bingo board images
+
+## BOT INTENTS:
+  - Message Content: To read content of messages
+  - Members: To mention members during game and get member ID information to check if they are the dungeon master
   
 ## COMMANDS:
 - !select [initials] [row] [column]: Register your selection during pre-game.
