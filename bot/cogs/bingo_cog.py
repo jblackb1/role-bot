@@ -103,6 +103,10 @@ class BingoCog(commands.Cog):
                 await ctx.send(f'<@{ctx.author.id}>: Initials must be exactly 2 characters.')
                 return
             
+            if row > bingo_size or col > bingo_size:
+                await ctx.send(f'Your row or column selection exceeds the size of the board. Enter numbers below {bingo_size}')
+                return
+            
             # Check if the row and column have already been selected
             existing_selections = self.bot.game_save.selections
             for user_id, existing_selection in existing_selections.items():
