@@ -5,6 +5,8 @@ import asyncio
 import discord
 import logging
 
+from keep_alive import keep_alive
+
 # Initialize logger
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -38,6 +40,7 @@ async def load(bot):
             await bot.load_extension(f'cogs.{filename[:-3]}')
 
 async def main(bot):
+    keep_alive()
     logger.info("RoleBot starting...")
     await load(bot)
     await bot.start(API_KEY)
