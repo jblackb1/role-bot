@@ -9,7 +9,7 @@ from keep_alive import keep_alive
 
 # Initialize logger
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # stdout handler and add it to the logger
 stdout_handler = logging.StreamHandler(sys.stdout)
