@@ -6,15 +6,6 @@ from discord.ext import commands
 
 logger = logging.getLogger(__name__)
 
-def load_bingo_squares():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    bingo_squares_file = os.path.join(base_dir, '..', 'config', 'bingo_squares.yaml')
-
-    with open(bingo_squares_file, 'r') as file:
-        bingo_squares = yaml.safe_load(file)
-
-    return bingo_squares
-
 def load_config(file_path):
     with open(file_path, 'r') as file:
         return yaml.safe_load(file)
@@ -32,18 +23,24 @@ board_channel_id = config['BOARD_CHANNEL_ID']
 game_channel_id = config['GAME_CHANNEL_ID']
 bingo_size = config['BINGO_SIZE']
 
-bingo_squares = load_bingo_squares()
-
 
 class BingoCog(commands.Cog):
-    def __init__(self, bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size, bingo_squares):
+    def __init__(self, bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size):
         self.bot = bot
         self.bingo_size = bingo_size
-        self.bingo_squares = bingo_squares
         self.dungeon_master = dungeon_master
         self.game_channel_id = game_channel_id
         self.board_channel_id = board_channel_id
         self.command_channel_id = command_channel_id
+
+    def load_bingo_squares(self):
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        bingo_squares_file = os.path.join(base_dir, '..', 'config', 'bingo_squares.yaml')
+
+        with open(bingo_squares_file, 'r') as file:
+            bingo_squares = yaml.safe_load(file)
+
+        return bingo_squares
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -141,7 +138,7 @@ class BingoCog(commands.Cog):
                 return
             
             # generate and send jpg of bingo square contents to DM channel
-            board_contents = self.bot.bingo_helper.generate_bingo_board(self.bingo_squares)
+            board_contents = self.bot.bingo_helper.generate_bingo_board(self.load_bingo_squares())
             imagepath = self.bot.bingo_helper.save_board_as_jpg(board_contents)
             with open(imagepath, 'rb') as f:
                 picture = discord.File(f)
