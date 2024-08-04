@@ -17,7 +17,7 @@ class DiceCog(commands.Cog):
         self.bot.tree.add_command(self.roll)
 
     @commands.Cog.listener()
-    def on_ready(self):
+    async def on_ready(self):
         logger.info(f'{self.bot.user.name}  Dice Roller cog has started.')
 
     @app_commands.command(name="roll",
