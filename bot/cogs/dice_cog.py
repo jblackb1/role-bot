@@ -20,10 +20,10 @@ class DiceCog(commands.Cog):
     async def on_ready(self):
         logger.info(f'{self.bot.user.name}  Dice Roller cog has started.')
 
-    @app_commands.command(name="roll",
+    @app_commands.command(name="dice",
                           description="Roll dice based on the given expression")
     @app_commands.describe(expression="The dice expression to roll")
-    async def roll(self, interaction: discord.Interaction, expression: str):
+    async def dice(self, interaction: discord.Interaction, expression: str):
         try:
             total, breakdown = self.roll_dice(expression)
             await interaction.response.send_message(f'{expression} = {total} ({breakdown})')
