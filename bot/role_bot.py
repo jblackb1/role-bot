@@ -27,7 +27,7 @@ class RoleBot(commands.Bot):
     async def resync(self, ctx):
         guild = discord.Object(id=self.guild_id)
         await self.tree.clear_commands(guild=guild)
-        self.sync_commands()
+        await self.sync_commands()
         await ctx.send(f'Synced slash commands.')
 
     async def load_cogs(self):
