@@ -9,6 +9,3 @@ class RoleBot(commands.Bot):
 
         self.bingo_helper = BingoHelper(self)
         self.game_save = GameSave()
-
-    async def on_ready(self):
-        await self.tree.sync()
