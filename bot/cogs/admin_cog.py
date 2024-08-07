@@ -27,7 +27,7 @@ class AdminCog(commands.Cog):
         if self.bot.guild_id:
             guild = discord.Object(id=self.bot.guild_id)
             result = await self.bot.tree.sync(guild=guild)
-            logging.info(f'Synced {len(result)} slash commands synced to guild {self.guild_id}.')
+            logging.info(f'Synced {len(result)} slash commands synced to guild {self.bot.guild_id}.')
         else:
             result = await self.bot.tree.sync()
             logging.info(f'Synced {len(result)} slash commands synced globally.')
