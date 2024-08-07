@@ -18,17 +18,9 @@ class RoleBot(commands.Bot):
 
     async def setup_hook(self):
         await self.load_cogs()
-        await self.sync_commands()
 
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
-
-    @commands.command(name="resync")
-    async def resync(self, ctx):
-        guild = discord.Object(id=self.guild_id)
-        await self.tree.clear_commands(guild=guild)
-        await self.sync_commands()
-        await ctx.send(f'Synced slash commands.')
 
     async def load_cogs(self):
         for filename in os.listdir('./bot/cogs'):
@@ -37,12 +29,3 @@ class RoleBot(commands.Bot):
                     await self.load_extension(f'cogs.{filename[:-3]}')
                 except Exception as e:
                     logger.warning(f'{filename[:-3]} cog not started: {e}')
-    
-    async def sync_commands(self):
-        if self.guild_id:
-            guild = discord.Object(id=self.guild_id)
-            result = await self.tree.sync(guild=guild)
-            logging.info(f'Synced {len(result)} slash commands synced to guild {self.guild_id}.')
-        else:
-            result = await self.tree.sync()
-            logging.info(f'Synced {len(result)} slash commands synced globally.')

@@ -38,8 +38,6 @@ GUILD_ID = config["GUILD_ID"]
 # Initialize the bot object
 bot = RoleBot(intents=intents, command_prefix="!", guild_id=GUILD_ID)
 
-bot.add_command(RoleBot.resync)
-
 async def main(bot):
     keep_alive()
     logger.info("RoleBot starting...")
