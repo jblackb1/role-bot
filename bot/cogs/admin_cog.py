@@ -10,11 +10,11 @@ logger = logging.getLogger(__name__)
 class AdminCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.sync_commands()
 
     @commands.Cog.listener()
     async def on_ready(self):
         logger.info(f'{self.bot.user.name}  Admin cog has started.')
+        await self.sync_commands()
 
     @commands.command(name="resync")
     async def resync(self, ctx):
