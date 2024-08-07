@@ -46,7 +46,7 @@ async def load(bot):
             except Exception as e:
                 logger.warning(f'{filename[:-3]} cog not started: {e}')
 
-@commands.command()
+@bot.command()
 async def sync(ctx):
     synced = await bot.tree.sync()
     logger.info(f"Synced {len(synced)} command(s).")
