@@ -15,7 +15,6 @@ class RoleBot(commands.Bot):
         self.guild_id = guild_id
         self.game_save = GameSave()
         self.bingo_helper = BingoHelper(self)
-        self.add_command(commands.Command(self.resync, name="resync"))
 
     async def setup_hook(self):
         await self.load_cogs()
@@ -24,6 +23,7 @@ class RoleBot(commands.Bot):
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
 
+    @commands.command(name="resync")
     async def resync(self, ctx):
         guild = discord.Object(id=self.guild_id)
         await self.tree.clear_commands(guild=guild)
