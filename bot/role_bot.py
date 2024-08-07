@@ -15,14 +15,13 @@ class RoleBot(commands.Bot):
         self.guild_id = guild_id
         self.game_save = GameSave()
         self.bingo_helper = BingoHelper(self)
+        self.tree = discord.app_commands.CommandTree(self)
 
     async def setup_hook(self):
         await self.load_cogs()
 
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
-        if not hasattr(self, 'tree') or self.tree is None:
-            self.tree = discord.app_commands.CommandTree(self)
 
     async def load_cogs(self):
         for filename in os.listdir('./bot/cogs'):
