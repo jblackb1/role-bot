@@ -35,7 +35,7 @@ class RoleBot(commands.Bot):
         if self.guild_id:
             guild = discord.Object(id=self.guild_id)
             result = await self.tree.sync(guild=guild)
-            logging.info(f'Synced {result} slash commands synced to guild {self.guild_id}.')
+            logging.info(f'Synced {len(result)} slash commands synced to guild {self.guild_id}.')
         else:
             result = await self.tree.sync()
-            logging.info(f'Synced {result} slash commands synced globally.')
+            logging.info(f'Synced {len(result)} slash commands synced globally.')
