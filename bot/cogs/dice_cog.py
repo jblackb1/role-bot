@@ -14,16 +14,16 @@ dice_pattern = re.compile(r'(\d*)d(\d+)([+-]\d+)?')
 class DiceCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.tree.add_command(self.dice)
+        self.bot.tree.add_command(self.roll)
 
     @commands.Cog.listener()
     async def on_ready(self):
         logger.info(f'{self.bot.user.name}  Dice Roller cog has started.')
 
-    @app_commands.command(name="dice",
+    @app_commands.command(name="roll",
                           description="Roll dice based on the given expression")
     @app_commands.describe(expression="The dice expression to roll")
-    async def dice(self, interaction: discord.Interaction, expression: str):
+    async def roll(self, interaction: discord.Interaction, expression: str):
         try:
             total, breakdown = self.roll_dice(expression)
             await interaction.response.send_message(f'{expression} = {total} ({breakdown})')

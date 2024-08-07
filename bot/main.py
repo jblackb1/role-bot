@@ -37,7 +37,10 @@ intents.members = True
 async def load(bot):
     for filename in os.listdir('./bot/cogs'):
         if filename.endswith('cog.py'):
-            await bot.load_extension(f'cogs.{filename[:-3]}')
+            try:
+                await bot.load_extension(f'cogs.{filename[:-3]}')
+            except Exception as e:
+                logger.warning(f'{filename[:-3]} cog not started: {e}')
 
 async def main(bot):
     keep_alive()
