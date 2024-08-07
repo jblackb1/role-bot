@@ -14,7 +14,6 @@ dice_pattern = re.compile(r'(\d*)d(\d+)([+-]\d+)?')
 class DiceCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.bot.tree.add_command(self.roll)
 
     @commands.Cog.listener()
     async def on_ready(self):
