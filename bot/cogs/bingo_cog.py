@@ -3,6 +3,7 @@ import yaml
 import logging
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 logger = logging.getLogger(__name__)
 
@@ -130,11 +131,12 @@ class BingoCog(commands.Cog):
         except Exception as error:
             logger.error(error)
 
-    @commands.command()
-    async def setup_game(self, ctx):
+    @app_commands.command(name="setup_game", description="Setup a new bingo game")
+    async def setup_game(self, interaction: discord.Interaction):
         try:
             # verify command is only coming from DM and command channel
-            if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
+            # this should be disabled in server settings but will catch it anyway
+            if interaction.user.id != self.dungeon_master:
                 return
             
             # generate and send jpg of bingo square contents to DM channel
@@ -142,12 +144,13 @@ class BingoCog(commands.Cog):
             imagepath = self.bot.bingo_helper.save_board_as_jpg(board_contents)
             with open(imagepath, 'rb') as f:
                 picture = discord.File(f)
-                await self.board_channel.send(file=picture)
+                await interaction.response.send_message("Bingo Board contents:", file=picture, ephemeral=True)
+                # await self.board_channel.send(file=picture)
 
             # generate and send blank emoji board to bingo game channel
             board = [[':white_large_square:' for _ in range(self.bingo_size)] for _ in range(self.bingo_size)]
-            board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, board)
-            await self.game_channel.send(board_str)
+            board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
+            await interaction.channel.send(board_str)
             self.bot.game_save.save_attr(current_board=board)
 
             logger.info('Setting up new Bingo game.')

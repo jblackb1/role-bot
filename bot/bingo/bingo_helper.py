@@ -53,7 +53,7 @@ class BingoHelper:
         img.save(self.imagepath)
         return self.imagepath
 
-    async def get_board_display(self, ctx, board):
+    async def get_board_display(self, interaction, board):
         # Format the board string
         board_rows = [' '.join(row) for row in board]
         board_str = f'{"IN PROGRESS" if self.bot.game_save.game_state == 1 else "PRE-GAME"}\nBingo Board:\n' + '\n'.join(board_rows)
@@ -63,7 +63,7 @@ class BingoHelper:
         for user_id, selections in self.bot.game_save.selections.items():
             row, col = selections['row'], selections['col']
             initials = selections['initials']
-            member = ctx.guild.get_member(user_id)
+            member = interaction.guild.get_member(user_id)
             if member is not None:
                 selections_text += f'{initials}: row {row+1}, col {col+1}\n'
 
@@ -74,7 +74,7 @@ class BingoHelper:
         board_str += '\n\n' + selections_text + '\n' + winners_text
 
         existing_board_message = None
-        async for message in ctx.history(limit=100):
+        async for message in interaction.channel.history(limit=100):
             if message.author == self.bot.user and 'Bingo Board' in message.content:
                 existing_board_message = message
                 break
