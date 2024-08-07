@@ -21,6 +21,8 @@ class RoleBot(commands.Bot):
 
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
+        if not hasattr(self, 'tree') or self.tree is None:
+            self.tree = discord.app_commands.CommandTree(self)
 
     async def load_cogs(self):
         for filename in os.listdir('./bot/cogs'):
