@@ -21,7 +21,7 @@ class DiceCog(commands.Cog):
 
     @app_commands.command(name="roll",
                           description="Roll dice based on the given expression")
-    @app_commands.describe(expression="The dice expression to roll")
+    @app_commands.describe(expression="The dice expression to roll. Format: <num of dice>d<die size>+<modifier> e.x. 2d6+4")
     async def roll(self, interaction: discord.Interaction, expression: str):
         try:
             total, breakdown = self.roll_dice(expression)
