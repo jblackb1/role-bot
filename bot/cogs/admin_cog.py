@@ -19,17 +19,17 @@ class AdminCog(commands.Cog):
     @commands.command(name="resync")
     async def resync(self, ctx):
         guild = discord.Object(id=self.bot.guild_id)
-        await self.tree.clear_commands(guild=guild)
+        await self.bot.tree.clear_commands(guild=guild)
         await self.sync_commands()
         await ctx.send(f'Synced slash commands.')
     
     async def sync_commands(self):
         if self.bot.guild_id:
             guild = discord.Object(id=self.bot.guild_id)
-            result = await self.tree.sync(guild=guild)
+            result = await self.bot.tree.sync(guild=guild)
             logging.info(f'Synced {len(result)} slash commands synced to guild {self.guild_id}.')
         else:
-            result = await self.tree.sync()
+            result = await self.bot.tree.sync()
             logging.info(f'Synced {len(result)} slash commands synced globally.')
 
 async def setup(bot):
