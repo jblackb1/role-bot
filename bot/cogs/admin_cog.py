@@ -31,3 +31,6 @@ class AdminCog(commands.Cog):
         else:
             result = await self.tree.sync()
             logging.info(f'Synced {len(result)} slash commands synced globally.')
+
+async def setup(bot):
+    await bot.add_cog(AdminCog(bot))
