@@ -23,6 +23,12 @@ class RoleBot(commands.Bot):
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
 
+    @commands.command()
+    async def resync(self):
+        guild = discord.Object(id=self.guild_id)
+        await self.tree.clear_commands(guild=guild)
+        self.sync_commands()
+
     async def load_cogs(self):
         for filename in os.listdir('./bot/cogs'):
             if filename.endswith('cog.py'):
