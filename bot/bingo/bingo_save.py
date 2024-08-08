@@ -39,6 +39,8 @@ class GameSave:
         self.current_board = loaded_game_data["current_board"]
 
     def reset(self):
+        if not os.path.exists(self.save_file):
+            self.save()
         self.selections = {}
         self.game_state = 0
         self.winners = []
