@@ -13,7 +13,7 @@ class AdminCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f'{self.bot.user.name}  Admin cog has started.')
+        logger.info(f'{self.bot.user.name}  Admin cog has started. Guild ID for validation: {self.bot.guild_id}')
         await self.sync_commands()
 
     @commands.command(name="resync")
