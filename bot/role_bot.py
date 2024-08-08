@@ -15,6 +15,7 @@ class RoleBot(commands.Bot):
         self.guild_id = guild_id
         self.game_save = GameSave()
         self.bingo_helper = BingoHelper(self)
+        logger.info(f'{self.tree}')
 
     async def setup_hook(self):
         await self.load_cogs()

@@ -18,11 +18,15 @@ class AdminCog(commands.Cog):
 
     @commands.command(name="resync")
     async def resync(self, ctx):
-        guild = discord.Object(id=self.bot.guild_id)
-        await self.bot.tree.clear_commands(guild=guild)
-        await self.sync_commands()
-        await ctx.send(f'Synced slash commands.')
-    
+        logging.info(f'Command Tree before clearing: {self.bot.tree}')
+        if self.bot.tree:
+            guild = discord.Object(id=self.bot.guild_id)
+            await self.bot.tree.clear_commands(guild=guild)
+            await self.sync_commands()
+            await ctx.send(f'Synced slash commands.')
+        else:
+            logger.warning('Bot command tree does not exist')
+
     async def sync_commands(self):
         if self.bot.guild_id:
             guild = discord.Object(id=self.bot.guild_id)
