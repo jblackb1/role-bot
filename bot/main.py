@@ -36,7 +36,9 @@ API_KEY = config["API_KEY"]
 GUILD_ID = config["GUILD_ID"]
 
 # Initialize the bot object
-bot = RoleBot(intents=intents, command_prefix="!", guild_id=GUILD_ID)
+#bot = RoleBot(intents=intents, command_prefix="!", guild_id=GUILD_ID)
+bot = RoleBot(intents=intents, command_prefix="!")
+
 
 async def main(bot):
     keep_alive()
