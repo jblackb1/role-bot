@@ -234,23 +234,23 @@ class BingoCog(commands.Cog):
         except Exception as error:
             logger.error(error)
 
-    @commands.command()
-    async def reset_game(self, ctx):
+    @app_commands.command(name="reset_game", description="Reset the game.")
+    async def reset_game(self, interaction: discord.Interaction):
         try:
             # verify command is only coming from DM and command channel
-            if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
-                return
+            #if interaction.user.id != self.dungeon_master or interaction.channel.id != self.command_channel.id:
+            #    return
 
             logger.info('Resetting the gamesave and removing board and selection messages from the game channel.')
 
-            async for message in self.game_channel.history(limit=100):
+            async for message in interaction.channel.history(limit=100):
                 if message.author == self.bot.user and ('Bingo Board' in message.content or 'registered' in message.content):
                     await message.delete()
 
             # Clear user selections and winners
             self.bot.game_save.reset()
 
-            await ctx.send("The bingo board and user selections have been reset. You can start a new game using !setup_game.")
+            await interaction.response.send_message("The bingo board and user selections have been reset. You can start a new game using !setup_game.", ephemeral=True)
         except Exception as error:
             logger.error(error)
 
