@@ -70,7 +70,7 @@ class BingoCog(commands.Cog):
             if member is not None:
                 selection[member.id] = {'initials': initials.upper(), 'row': row - 1, 'col': col - 1}
                 game_save.save_attr(selection)
-                await interaction.channel.send(f'<@{interaction.user.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
+                await interaction.response.send_message(f'<@{interaction.user.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
 
             board = self.bot.bingo_helper.get_current_board(game_save)
             if board is None:
