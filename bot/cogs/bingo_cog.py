@@ -134,18 +134,13 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="setup_game", description="Setup a new bingo game")
     async def setup_game(self, interaction: discord.Interaction):
         try:
-            # verify command is only coming from DM and command channel
-            # this should be disabled in server settings but will catch it anyway
-            #if interaction.user.id != self.dungeon_master:
-            #    return
-            
+            await interaction.response.defer()
             # generate and send jpg of bingo square contents to DM channel
             board_contents = self.bot.bingo_helper.generate_bingo_board(self.load_bingo_squares())
             imagepath = self.bot.bingo_helper.save_board_as_jpg(board_contents)
             with open(imagepath, 'rb') as f:
                 picture = discord.File(f)
-                await interaction.response.send_message("Bingo Board contents:", file=picture, ephemeral=True)
-                # await self.board_channel.send(file=picture)
+                await interaction.followup.send("Bingo Board contents:", file=picture, ephemeral=True)
 
             # generate and send blank emoji board to bingo game channel
             board = [[':white_large_square:' for _ in range(self.bingo_size)] for _ in range(self.bingo_size)]
