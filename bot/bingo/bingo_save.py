@@ -19,6 +19,7 @@ class GameSave:
             self.game_state = 0
             self.winners = []
             self.current_board = []
+            self.save()
 
     def save(self):
         game_data = {
