@@ -193,4 +193,4 @@ class BingoCog(commands.Cog):
             logger.error(error)
 
 async def setup(bot):
-    await bot.add_cog(BingoCog(bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size))
+    await bot.add_cog(BingoCog(bot, bingo_size))
