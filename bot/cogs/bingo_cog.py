@@ -17,11 +17,6 @@ config_path = os.path.join(base_dir, '..', 'config', 'bingo_config.yaml')
 
 config = load_config(config_path)
 
-# Now you can access the config values like this:
-dungeon_master = config['DUNGEON_MASTER']
-command_channel_id = config['COMMAND_CHANNEL_ID']
-board_channel_id = config['BOARD_CHANNEL_ID']
-game_channel_id = config['GAME_CHANNEL_ID']
 bingo_size = config['BINGO_SIZE']
 
 
@@ -29,10 +24,6 @@ class BingoCog(commands.Cog):
     def __init__(self, bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size):
         self.bot = bot
         self.bingo_size = bingo_size
-        self.dungeon_master = dungeon_master
-        self.game_channel_id = game_channel_id
-        self.board_channel_id = board_channel_id
-        self.command_channel_id = command_channel_id
 
     def load_bingo_squares(self):
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -45,14 +36,7 @@ class BingoCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        try:
-            logger.info(f'{self.bot.user.name} has connected to Discord!')
-            self.game_channel = self.bot.get_channel(self.game_channel_id)
-            self.board_channel = self.bot.get_channel(self.board_channel_id)
-            self.command_channel = self.bot.get_channel(self.command_channel_id)
-            await self.send_commands_message(self.command_channel)
-        except Exception as error:
-            logger.error(error)
+        logger.info(f'{self.bot.user.name} has connected to Discord!')
 
     @app_commands.command(name="select", description="select a row and column to play bingo with")
     async def select(self, interaction: discord.Interaction, initials: str, row: int, col: int):
