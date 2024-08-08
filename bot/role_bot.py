@@ -9,11 +9,9 @@ from bingo.bingo_helper import BingoHelper
 logger = logging.getLogger(__name__)
 
 class RoleBot(commands.Bot):
-    def __init__(self, intents, command_prefix, guild_id=None):
+    def __init__(self, intents, command_prefix):
         super().__init__(intents=intents, command_prefix=command_prefix)
-
-        self.guild_id = guild_id
-        self.game_save = GameSave(self.guild_id)
+        self.game_saves = {}
         self.bingo_helper = BingoHelper(self)
         logger.info(f'{self.tree}')
 
@@ -22,6 +20,11 @@ class RoleBot(commands.Bot):
 
     async def on_ready(self):
         logger.info(f'Logged in as {self.user.name}')
+
+    def get_game_save(self, guild_id):
+        if guild_id not in self.game_saves:
+            self.game_saves[guild_id] = GameSave(guild_id)
+        return self.game_saves[guild_id]
 
     async def load_cogs(self):
         for filename in os.listdir('./bot/cogs'):

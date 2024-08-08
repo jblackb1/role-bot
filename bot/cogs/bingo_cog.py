@@ -41,10 +41,13 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="select", description="select a row and column to play bingo with")
     async def select(self, interaction: discord.Interaction, initials: str, row: int, col: int):
         try:
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
+
             selection = {}
 
             # Only accept selections from the game channel and during the pre-game stage
-            if self.bot.game_save.game_state != 0:
+            if game_save.game_state != 0:
                 await interaction.response.send_message("Game has already started. Please reset your game to add new selections.", ephemeral=True)
                 return
 
@@ -57,7 +60,7 @@ class BingoCog(commands.Cog):
                 return
             
             # Check if the row and column have already been selected
-            existing_selections = self.bot.game_save.selections
+            existing_selections = game_save.selections
             for user_id, existing_selection in existing_selections.items():
                 if existing_selection['row'] == row - 1 or existing_selection['col'] == col - 1:
                     await interaction.response.send_message(f'<@{interaction.user.id}>: This row or column has already been selected by another player.', ephemeral=True)
@@ -66,7 +69,7 @@ class BingoCog(commands.Cog):
             member = interaction.guild.get_member(interaction.user.id)
             if member is not None:
                 selection[member.id] = {'initials': initials.upper(), 'row': row - 1, 'col': col - 1}
-                self.bot.game_save.save_attr(selection)
+                game_save.save_attr(selection)
                 await interaction.channel.send(f'<@{interaction.user.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
 
             board = self.bot.bingo_helper.get_current_board()
@@ -85,6 +88,9 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="setup_game", description="Setup a new bingo game")
     async def setup_game(self, interaction: discord.Interaction):
         try:
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
+
             await interaction.response.defer(ephemeral=True)
             # generate and send jpg of bingo square contents to DM channel
             board_contents = self.bot.bingo_helper.generate_bingo_board(self.load_bingo_squares())
@@ -97,7 +103,7 @@ class BingoCog(commands.Cog):
             board = [[':white_large_square:' for _ in range(self.bingo_size)] for _ in range(self.bingo_size)]
             board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
             await interaction.channel.send(board_str)
-            self.bot.game_save.save_attr(current_board=board)
+            game_save.save_attr(current_board=board)
 
             logger.info('Setting up new Bingo game.')
 
@@ -107,11 +113,13 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="start_game", description="Start the bingo game. No more selections can be made.")
     async def start_game(self, interaction: discord.Interaction):
         try:
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
             # Start the game only if it's in pre-game state
-            if self.bot.game_save.game_state == 0:
-                self.bot.game_save.save_attr(game_state=1)
+            if game_save.game_state == 0:
+                game_save.save_attr(game_state=1)
                 await interaction.channel.send("The game has started. No more selections can be made.")
-                board_str = await self.bot.bingo_helper.get_board_display(interaction, self.bot.game_save.current_board)
+                board_str = await self.bot.bingo_helper.get_board_display(interaction, game_save.current_board)
                 await interaction.channel.send(board_str)
                 logger.info('Starting the Bingo game now')
             else:
@@ -127,6 +135,9 @@ class BingoCog(commands.Cog):
         try:
             logger.info(f'Row {row} and column {col} being added to the board.')
 
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
+
             # get current bingo board
             board = self.bot.bingo_helper.get_current_board()
             if board is None:
@@ -135,7 +146,7 @@ class BingoCog(commands.Cog):
             # set added square to black square emoji to indicate a selection
             board[row - 1][col - 1] = ':black_large_square:'
 
-            winning_user_ids = self.bot.bingo_helper.check_winners(board, self.bingo_size)
+            winning_user_ids = self.bot.bingo_helper.check_winners(board, self.bingo_size, guild_id)
             for id in winning_user_ids:
                 if id is not None:
                     winning_user = interaction.guild.get_member(id)
@@ -145,7 +156,7 @@ class BingoCog(commands.Cog):
             board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
             await interaction.channel.send(board_str)
 
-            self.bot.game_save.save_attr(current_board=board)
+            game_save.save_attr(current_board=board)
 
         except Exception as error:
             logger.error(error)
@@ -154,6 +165,9 @@ class BingoCog(commands.Cog):
     async def remove_square(self, interaction: discord.Interaction, row: int, col: int):
         try:
             logger.info(f'Row {row} and column {col} being removed from the board.')
+
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
 
             board = await self.bot.bingo_helper.get_current_board()
             if board is None:
@@ -164,7 +178,7 @@ class BingoCog(commands.Cog):
             board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
             await interaction.channel.send(board_str)
 
-            self.bot.game_save.save_attr(current_board=board)
+            game_save.save_attr(current_board=board)
         except Exception as error:
             logger.error(error)
 
@@ -173,12 +187,15 @@ class BingoCog(commands.Cog):
         try:
             logger.info('Resetting the gamesave and removing board and selection messages from the game channel.')
 
+            guild_id = str(interaction.guild.id)
+            game_save = self.bot.get_game_save(guild_id)
+
             async for message in interaction.channel.history(limit=100):
                 if message.author == self.bot.user and ('Bingo Board' in message.content or 'registered' in message.content):
                     await message.delete()
 
             # Clear user selections and winners
-            self.bot.game_save.reset()
+            game_save.reset()
 
             await interaction.response.send_message("The bingo board and user selections have been reset. You can start a new game using !setup_game.", ephemeral=True)
         except Exception as error:

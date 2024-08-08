@@ -54,13 +54,17 @@ class BingoHelper:
         return self.imagepath
 
     async def get_board_display(self, interaction, board):
+
+        guild_id = str(interaction.guild.id)
+        game_save = self.bot.get_game_save(guild_id)
+
         # Format the board string
         board_rows = [' '.join(row) for row in board]
-        board_str = f'{"IN PROGRESS" if self.bot.game_save.game_state == 1 else "PRE-GAME"}\nBingo Board:\n' + '\n'.join(board_rows)
+        board_str = f'{"IN PROGRESS" if game_save.game_state == 1 else "PRE-GAME"}\nBingo Board:\n' + '\n'.join(board_rows)
 
         # Add selections to the board
         selections_text = "Selections:\n"
-        for user_id, selections in self.bot.game_save.selections.items():
+        for user_id, selections in game_save.selections.items():
             row, col = selections['row'], selections['col']
             initials = selections['initials']
             member = interaction.guild.get_member(user_id)
@@ -68,7 +72,7 @@ class BingoHelper:
                 selections_text += f'{initials}: row {row+1}, col {col+1}\n'
 
         # Add winners to the board
-        winners_text = 'Winners: ' + ', '.join([f'<@{winner_id}>' for winner_id in self.bot.game_save.winners])
+        winners_text = 'Winners: ' + ', '.join([f'<@{winner_id}>' for winner_id in game_save.winners])
 
         # Combine all parts of the board string
         board_str += '\n\n' + selections_text + '\n' + winners_text
@@ -84,11 +88,14 @@ class BingoHelper:
             
         return board_str
 
-    def check_winners(self, board, bingo_size):
-        current_winners = set(self.bot.game_save.winners)
+    def check_winners(self, board, bingo_size, guild_id):
+
+        game_save = self.bot.get_game_save(guild_id)
+
+        current_winners = set(game_save.winners)
         new_winners = set()
         
-        for member, selections in self.bot.game_save.selections.items():
+        for member, selections in game_save.selections.items():
             row, col = selections['row'], selections['col']
             if all([square == ':black_large_square:' for square in board[row]]) or all([board[i][col] == ':black_large_square:' for i in range(bingo_size)]):
                 new_winners.add(member)
@@ -97,7 +104,7 @@ class BingoHelper:
         winners_diff = new_winners - current_winners
 
         # Update the game_save.winners list with the new winners
-        self.bot.game_save.save_attr(winners=list(new_winners))
+        game_save.save_attr(winners=list(new_winners))
 
         return winners_diff
 
