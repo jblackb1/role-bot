@@ -107,10 +107,6 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="start_game", description="Start the bingo game. No more selections can be made.")
     async def start_game(self, interaction: discord.Interaction):
         try:
-            # Verify command is only coming from DM and command channel
-            #if interaction.author.id != self.dungeon_master or interaction.channel.id != self.command_channel.id:
-                #return
-
             # Start the game only if it's in pre-game state
             if self.bot.game_save.game_state == 0:
                 self.bot.game_save.save_attr(game_state=1)
@@ -175,10 +171,6 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="reset_game", description="Reset the game.")
     async def reset_game(self, interaction: discord.Interaction):
         try:
-            # verify command is only coming from DM and command channel
-            #if interaction.user.id != self.dungeon_master or interaction.channel.id != self.command_channel.id:
-            #    return
-
             logger.info('Resetting the gamesave and removing board and selection messages from the game channel.')
 
             async for message in interaction.channel.history(limit=100):

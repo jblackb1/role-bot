@@ -13,7 +13,7 @@ class RoleBot(commands.Bot):
         super().__init__(intents=intents, command_prefix=command_prefix)
 
         self.guild_id = guild_id
-        self.game_save = GameSave()
+        self.game_save = GameSave(self.guild_id)
         self.bingo_helper = BingoHelper(self)
         logger.info(f'{self.tree}')
 

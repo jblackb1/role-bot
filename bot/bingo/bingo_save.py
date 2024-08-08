@@ -2,10 +2,11 @@ import os
 import pickle
 
 class GameSave:
-    def __init__(self, save_file=None):
+    def __init__(self, guild_id, save_file=None):
+        self.guild_id = guild_id
         if save_file is None:
             base_dir = os.path.dirname(os.path.abspath(__file__))
-            save_file = os.path.join(base_dir, '..', '..', 'data', 'game_save.pkl')
+            save_file = os.path.join(base_dir, '..', '..', 'config', f'{self.guild_id}_game_save.pkl')
         
         self.save_file = save_file
 
