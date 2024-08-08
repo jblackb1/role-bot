@@ -77,7 +77,7 @@ class BingoCog(commands.Cog):
                 return
 
             # Refresh the board to display new selections
-            board_str = await self.bot.bingo_helper.get_board_display(interaction, self.bot.game_save.current_board)
+            board_str = await self.bot.bingo_helper.get_board_display(interaction, game_save.current_board)
             await interaction.channel.send(board_str)
 
             logger.info(f'{member.display_name} has registered with initials {initials.upper()} and selected row {row} and column {col}')
