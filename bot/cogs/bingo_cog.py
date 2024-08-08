@@ -136,8 +136,8 @@ class BingoCog(commands.Cog):
         try:
             # verify command is only coming from DM and command channel
             # this should be disabled in server settings but will catch it anyway
-            if interaction.user.id != self.dungeon_master:
-                return
+            #if interaction.user.id != self.dungeon_master:
+            #    return
             
             # generate and send jpg of bingo square contents to DM channel
             board_contents = self.bot.bingo_helper.generate_bingo_board(self.load_bingo_squares())
