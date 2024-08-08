@@ -169,7 +169,7 @@ class BingoCog(commands.Cog):
             guild_id = str(interaction.guild.id)
             game_save = self.bot.get_game_save(guild_id)
 
-            board = await self.bot.bingo_helper.get_current_board(game_save)
+            board = self.bot.bingo_helper.get_current_board(game_save)
             if board is None:
                 return
 
@@ -179,6 +179,7 @@ class BingoCog(commands.Cog):
             await interaction.channel.send(board_str)
 
             game_save.save_attr(current_board=board)
+
         except Exception as error:
             logger.error(error)
 
