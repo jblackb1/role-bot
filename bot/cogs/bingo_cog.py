@@ -21,7 +21,7 @@ bingo_size = config['BINGO_SIZE']
 
 
 class BingoCog(commands.Cog):
-    def __init__(self, bot, command_channel_id, game_channel_id, board_channel_id, dungeon_master, bingo_size):
+    def __init__(self, bot, bingo_size):
         self.bot = bot
         self.bingo_size = bingo_size
 
