@@ -72,7 +72,7 @@ class BingoCog(commands.Cog):
                 game_save.save_attr(selection)
                 await interaction.channel.send(f'<@{interaction.user.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
 
-            board = self.bot.bingo_helper.get_current_board()
+            board = self.bot.bingo_helper.get_current_board(game_save)
             if board is None:
                 return
 
@@ -139,7 +139,7 @@ class BingoCog(commands.Cog):
             game_save = self.bot.get_game_save(guild_id)
 
             # get current bingo board
-            board = self.bot.bingo_helper.get_current_board()
+            board = self.bot.bingo_helper.get_current_board(game_save)
             if board is None:
                 return
 
@@ -169,7 +169,7 @@ class BingoCog(commands.Cog):
             guild_id = str(interaction.guild.id)
             game_save = self.bot.get_game_save(guild_id)
 
-            board = await self.bot.bingo_helper.get_current_board()
+            board = await self.bot.bingo_helper.get_current_board(game_save)
             if board is None:
                 return
 

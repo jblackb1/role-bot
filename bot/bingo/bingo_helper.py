@@ -108,5 +108,5 @@ class BingoHelper:
 
         return winners_diff
 
-    def get_current_board(self):
-        return self.bot.game_save.current_board
+    def get_current_board(self, game_save):
+        return game_save.current_board
