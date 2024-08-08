@@ -54,50 +54,44 @@ class BingoCog(commands.Cog):
         except Exception as error:
             logger.error(error)
 
-    @commands.command()
-    async def select(self, ctx, initials: str = None, row: int = None, col: int = None):
+    @app_commands.command(name="select", description="select a row and column to play bingo with")
+    async def select(self, interaction: discord.Interaction, initials: str, row: int, col: int):
         try:
             selection = {}
 
             # Only accept selections from the game channel and during the pre-game stage
-            if ctx.channel.id != self.game_channel.id:
-                if self.bot.game_save.game_state != 0:
-                    await ctx.send("Game has already started. Please reset your game to add new selections.")
-                return
-
-            # Validate the command format and send a format message if incorrect
-            if initials is None or row is None or col is None:
-                await ctx.send("Invalid command format. Please use: `!select <initials> <row> <column>`")
+            if self.bot.game_save.game_state != 0:
+                await interaction.response.send_message("Game has already started. Please reset your game to add new selections.", ephemeral=True)
                 return
 
             if len(initials) != 2:
-                await ctx.send(f'<@{ctx.author.id}>: Initials must be exactly 2 characters.')
+                await interaction.response.send_message(f'<@{interaction.user.id}>: Initials must be exactly 2 characters.', ephemeral=True)
                 return
             
             if row > bingo_size or col > bingo_size:
-                await ctx.send(f'Your row or column selection exceeds the size of the board. Enter numbers below {bingo_size}')
+                await interaction.response.send_message(f'Your row or column selection exceeds the size of the board. Enter numbers below {bingo_size}', ephemeral=True)
                 return
             
             # Check if the row and column have already been selected
             existing_selections = self.bot.game_save.selections
             for user_id, existing_selection in existing_selections.items():
                 if existing_selection['row'] == row - 1 or existing_selection['col'] == col - 1:
-                    await ctx.send(f'<@{ctx.author.id}>: This row or column has already been selected by another player.')
+                    await interaction.response.send_message(f'<@{interaction.user.id}>: This row or column has already been selected by another player.', ephemeral=True)
                     return
 
-            member = ctx.guild.get_member(ctx.author.id)
+            member = interaction.guild.get_member(interaction.user.id)
             if member is not None:
                 selection[member.id] = {'initials': initials.upper(), 'row': row - 1, 'col': col - 1}
                 self.bot.game_save.save_attr(selection)
-                await ctx.send(f'<@{ctx.author.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
+                await interaction.channel.send(f'<@{interaction.user.id}> has registered with initials {initials.upper()} and selected row {row} and column {col}')
 
             board = self.bot.bingo_helper.get_current_board()
             if board is None:
                 return
 
             # Refresh the board to display new selections
-            board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, self.bot.game_save.current_board)
-            await ctx.send(board_str)
+            board_str = await self.bot.bingo_helper.get_board_display(interaction, self.bot.game_save.current_board)
+            await interaction.channel.send(board_str)
 
             logger.info(f'{member.display_name} has registered with initials {initials.upper()} and selected row {row} and column {col}')
 
@@ -148,13 +142,9 @@ class BingoCog(commands.Cog):
             logger.error(error)
 
 
-    @commands.command()
-    async def add_square(self, ctx, row: int, col: int):
+    @app_commands.command(name="add_square", description="add a filled square to the game board")
+    async def add_square(self, interaction: discord.Interaction, row: int, col: int):
         try:
-            # verify command is only coming from DM and command channel
-            if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
-                return
-
             logger.info(f'Row {row} and column {col} being added to the board.')
 
             # get current bingo board
@@ -168,35 +158,31 @@ class BingoCog(commands.Cog):
             winning_user_ids = self.bot.bingo_helper.check_winners(board, self.bingo_size)
             for id in winning_user_ids:
                 if id is not None:
-                    winning_user = ctx.guild.get_member(id)
-                    await self.game_channel.send(f'{winning_user.mention} has won!')
+                    winning_user = interaction.guild.get_member(id)
+                    await interaction.channel.send(f'{winning_user.mention} has won!')
                     logger.info(f'{winning_user.display_name} has won!')
 
-            board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, board)
-            await self.game_channel.send(board_str)
+            board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
+            await interaction.channel.send(board_str)
 
             self.bot.game_save.save_attr(current_board=board)
 
         except Exception as error:
             logger.error(error)
 
-    @commands.command()
-    async def remove_square(self, ctx, row: int, col: int):
+    @app_commands.command(name="remove_square", description="remove a specific square from the game board")
+    async def remove_square(self, interaction: discord.Interaction, row: int, col: int):
         try:
-            # verify command is only coming from DM and command channel
-            if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
-                return
-
             logger.info(f'Row {row} and column {col} being removed from the board.')
 
-            board = await self.get_current_board()
+            board = await self.bot.bingo_helper.get_current_board()
             if board is None:
                 return
 
             # set specified square back to white, save, and send
             board[row - 1][col - 1] = ':white_large_square:'
-            board_str = await self.bot.bingo_helper.get_board_display(ctx, board)
-            await self.game_channel.send(board_str)
+            board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
+            await interaction.channel.send(board_str)
 
             self.bot.game_save.save_attr(current_board=board)
         except Exception as error:
