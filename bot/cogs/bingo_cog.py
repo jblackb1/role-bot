@@ -54,33 +54,6 @@ class BingoCog(commands.Cog):
         except Exception as error:
             logger.error(error)
 
-    async def send_commands_message(self, ctx):
-        logger.debug('Checking for existing pinned commands message.')
-        try:
-            pinned_message_exists = False
-            for message in await ctx.pins():
-                if message.author == self.bot.user and "Commands" in message.content:
-                    pinned_message_exists = True
-                    break
-        except Exception as error:
-            logger.error(error)
-
-        if not pinned_message_exists:
-            commands_str = """**Commands:**
-            - !select [initials] [row] [column]: Register your selection during pre-game.
-            - !setup_game: Create board message and board contents message. Allow selections at this stage (DM only).
-            - !start_game: Start the game. Selection not allowed after this point (DM only).
-            - !add_square [row] [column]: Add a square to the board (DM only).
-            - !remove_square [row] [column]: Remove a square from the board (DM only).
-            - !reset_game: Reset the board and user selections (DM only)."""
-
-            try:
-                logger.debug('Sending commands info to GM channel and pinning the message.')
-                commands_message = await ctx.send(commands_str)
-                await commands_message.pin()
-            except Exception as error:
-                logger.error(error)
-
     @commands.command()
     async def select(self, ctx, initials: str = None, row: int = None, col: int = None):
         try:
@@ -134,13 +107,13 @@ class BingoCog(commands.Cog):
     @app_commands.command(name="setup_game", description="Setup a new bingo game")
     async def setup_game(self, interaction: discord.Interaction):
         try:
-            await interaction.response.defer()
+            await interaction.response.defer(ephemeral=True)
             # generate and send jpg of bingo square contents to DM channel
             board_contents = self.bot.bingo_helper.generate_bingo_board(self.load_bingo_squares())
             imagepath = self.bot.bingo_helper.save_board_as_jpg(board_contents)
             with open(imagepath, 'rb') as f:
                 picture = discord.File(f)
-                await interaction.followup.send("Bingo Board contents:", file=picture, ephemeral=True)
+                await interaction.followup.send("Board contents:", file=picture, ephemeral=True)
 
             # generate and send blank emoji board to bingo game channel
             board = [[':white_large_square:' for _ in range(self.bingo_size)] for _ in range(self.bingo_size)]

@@ -74,7 +74,7 @@ class BingoHelper:
         board_str += '\n\n' + selections_text + '\n' + winners_text
 
         existing_board_message = None
-        async for message in interaction.channel.history(limit=100):
+        async for message in interaction.channel.history(limit=50):
             if message.author == self.bot.user and 'Bingo Board' in message.content:
                 existing_board_message = message
                 break
