@@ -158,22 +158,22 @@ class BingoCog(commands.Cog):
         except Exception as error:
             logger.error(error, exc_info=True)
 
-    @commands.command()
-    async def start_game(self, ctx):
+    @app_commands.command(name="start_game", description="Start the bingo game. No more selections can be made.")
+    async def start_game(self, interaction: discord.Interaction):
         try:
             # Verify command is only coming from DM and command channel
-            if ctx.author.id != self.dungeon_master or ctx.channel.id != self.command_channel.id:
-                return
+            #if interaction.author.id != self.dungeon_master or interaction.channel.id != self.command_channel.id:
+                #return
 
             # Start the game only if it's in pre-game state
             if self.bot.game_save.game_state == 0:
                 self.bot.game_save.save_attr(game_state=1)
-                await self.game_channel.send("The game has started. No more selections can be made.")
-                board_str = await self.bot.bingo_helper.get_board_display(self.game_channel, self.bot.game_save.current_board)
-                await self.game_channel.send(board_str)
+                await interaction.channel.send("The game has started. No more selections can be made.")
+                board_str = await self.bot.bingo_helper.get_board_display(interaction.channel, self.bot.game_save.current_board)
+                await interaction.channel.send(board_str)
                 logger.info('Starting the Bingo game now')
             else:
-                await ctx.send("The game has already started. Use !reset_game to start a new game.")
+                await interaction.response.send_message("The game has already started. Use !reset_game to start a new game.", ephemeral=True)
                 logger.info('User attempted to start the game while it was already started. Doing nothing.')
 
         except Exception as error:

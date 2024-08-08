@@ -20,8 +20,8 @@ class AdminCog(commands.Cog):
     async def resync(self, ctx):
         logging.info(f'Command Tree before clearing: {self.bot.tree}')
         if self.bot.tree:
-            guild = discord.Object(id=self.bot.guild_id)
-            await self.bot.tree.clear_commands(guild=guild)
+            #guild = discord.Object(id=self.bot.guild_id)
+            await self.bot.tree.clear_commands(guild=None)
             await self.sync_commands()
             await ctx.send(f'Synced slash commands.')
         else:
