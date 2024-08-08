@@ -154,9 +154,8 @@ class BingoCog(commands.Cog):
                     logger.info(f'{winning_user.display_name} has won!')
 
             board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
-            await interaction.channel.send(board_str)
             await interaction.response.send_message(f"row {row} col {col} square added to game board", ephemeral=True)
-
+            await interaction.channel.send(board_str)
 
             game_save.save_attr(current_board=board)
 
@@ -178,8 +177,8 @@ class BingoCog(commands.Cog):
             # set specified square back to white, save, and send
             board[row - 1][col - 1] = ':white_large_square:'
             board_str = await self.bot.bingo_helper.get_board_display(interaction, board)
-            await interaction.channel.send(board_str)
             await interaction.response.send_message(f"row {row} col {col} square removed from game board", ephemeral=True)
+            await interaction.channel.send(board_str)
 
             game_save.save_attr(current_board=board)
 
