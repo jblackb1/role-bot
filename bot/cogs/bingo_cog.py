@@ -137,7 +137,7 @@ class BingoCog(commands.Cog):
             if self.bot.game_save.game_state == 0:
                 self.bot.game_save.save_attr(game_state=1)
                 await interaction.channel.send("The game has started. No more selections can be made.")
-                board_str = await self.bot.bingo_helper.get_board_display(interaction.channel, self.bot.game_save.current_board)
+                board_str = await self.bot.bingo_helper.get_board_display(interaction, self.bot.game_save.current_board)
                 await interaction.channel.send(board_str)
                 logger.info('Starting the Bingo game now')
             else:
