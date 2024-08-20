@@ -3,7 +3,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from keras.src.models import load_model
+from keras.api.models import load_model
 from keras.src.utils import load_img, img_to_array
 import numpy as np
 import logging
