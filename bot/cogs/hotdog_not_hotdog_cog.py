@@ -6,7 +6,12 @@ from discord import app_commands
 from keras.src.models import load_model
 from keras.src.utils import load_img, img_to_array
 import numpy as np
+import logging
 import os
+
+
+logger = logging.getLogger(__name__)
+
 
 class HotDogCog(commands.Cog):
     def __init__(self, bot):
@@ -19,6 +24,10 @@ class HotDogCog(commands.Cog):
         
         # Load the model
         self.model = load_model(model_path)
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        logger.info('Hotdog not Hotdog cog has started.')
 
     @app_commands.command(name="hotdog",
                           description="Attach an image and I will detect if it is hot dog or not hot dog.")

@@ -36,7 +36,7 @@ class BingoCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logger.info(f'{self.bot.user.name} has connected to Discord!')
+        logger.info('Bingo cog has started.')
 
     @app_commands.command(name="select", description="select a row and column to play bingo with")
     async def select(self, interaction: discord.Interaction, initials: str, row: int, col: int):
