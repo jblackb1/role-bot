@@ -6,3 +6,4 @@ bingo_squares.yaml
 hdnhd_training.py
 bot/config/hotdog-nothotdog
 .venv
+bot/config/hotdog_not_hotdog_model.h5
