@@ -33,9 +33,13 @@ class HotDogCog(commands.Cog):
     @app_commands.command(name="hotdog",
                           description="Attach an image and I will detect if it is hot dog or not hot dog.")
     async def hotdog(self, interaction: discord.Interaction, attachment: discord.Attachment):
+        logger.info(f'Hotdog command used by {interaction.user.display_name}.')
+
+        #Allow client time to respond
+        await interaction.response.defer(ephemeral=True)
         # Ensure an attachment was provided
         if not attachment:
-            await interaction.response.send_message("Please attach an image.")
+            await interaction.followup.send("Please attach an image.")
             return
 
         # Download the image
@@ -58,7 +62,7 @@ class HotDogCog(commands.Cog):
             result = "Not hotdog."
 
         # Send the result back to the Discord channel
-        await interaction.response.send_message(result)
+        await interaction.followup.send(result)
 
         # Clean up the temporary image
         os.remove(img_path)
