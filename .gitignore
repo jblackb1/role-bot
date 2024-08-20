@@ -3,3 +3,6 @@ bot/config/bingo_config.yaml
 bingo_board.jpg
 game_save.pkl
 bingo_squares.yaml
+hdnhd_training.py
+bot/config/hotdog-nothotdog
+.venv
