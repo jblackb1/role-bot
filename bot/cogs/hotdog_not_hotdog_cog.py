@@ -68,5 +68,5 @@ class HotDogCog(commands.Cog):
                 with open(file_path, 'wb') as f:
                     f.write(await response.read())
 
-def setup(bot):
-    bot.add_cog(HotDogCog(bot))
+async def setup(bot):
+    await bot.add_cog(HotDogCog(bot))
