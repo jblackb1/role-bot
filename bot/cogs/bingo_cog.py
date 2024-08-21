@@ -13,7 +13,7 @@ def load_config(file_path):
 
 # Get the base directory and construct the path to the config.yaml file
 base_dir = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(base_dir, '..', 'config', 'bingo_config.yaml')
+config_path = os.path.join(base_dir, '..', '..', 'config', 'bingo_config.yaml')
 
 config = load_config(config_path)
 
@@ -27,7 +27,7 @@ class BingoCog(commands.Cog):
 
     def load_bingo_squares(self):
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        bingo_squares_file = os.path.join(base_dir, '..', 'config', 'bingo_squares.yaml')
+        bingo_squares_file = os.path.join(base_dir, '..', '..', 'config', 'bingo_squares.yaml')
 
         with open(bingo_squares_file, 'r') as file:
             bingo_squares = yaml.safe_load(file)
