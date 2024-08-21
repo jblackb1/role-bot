@@ -56,7 +56,7 @@ class HotDogCog(commands.Cog):
         prediction = self.model.predict(img_array)[0][0]
 
         # Interpret prediction
-        if prediction > 0.5:
+        if prediction < 0.5:
             result = "Hotdog"
         else:
             result = "Not hotdog."
