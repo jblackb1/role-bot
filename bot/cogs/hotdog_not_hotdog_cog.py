@@ -62,7 +62,7 @@ class HotDogCog(commands.Cog):
             result = "Not hotdog."
 
         # Send the result back to the Discord channel
-        await interaction.followup.send(result, attachment=img_path, ephemeral=False)
+        await interaction.followup.send(result, file=img_path, ephemeral=False)
 
         # Clean up the temporary image
         os.remove(img_path)
