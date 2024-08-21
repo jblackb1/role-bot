@@ -1,9 +1,8 @@
 __pycache__
-bot/config/bingo_config.yaml
+config/bingo_config.yaml
 bingo_board.jpg
 game_save.pkl
 bingo_squares.yaml
 hdnhd_training.py
-bot/config/hotdog-nothotdog
+data/hotdog-nothotdog
 .venv
-bot/config/hotdog_not_hotdog_model.h5
