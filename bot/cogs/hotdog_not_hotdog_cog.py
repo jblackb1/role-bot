@@ -36,7 +36,7 @@ class HotDogCog(commands.Cog):
         logger.info(f'Hotdog command used by {interaction.user.display_name}.')
 
         #Allow client time to respond
-        await interaction.response.defer(ephemeral=True)
+        await interaction.response.defer()
         # Ensure an attachment was provided
         if not attachment:
             await interaction.followup.send("Please attach an image.")
@@ -64,7 +64,7 @@ class HotDogCog(commands.Cog):
         # Send the result back to the Discord channel
         with open(img_path, 'rb') as img_file:
             discord_file = discord.File(img_file, filename=attachment.filename)
-            await interaction.followup.send(result, file=discord_file, ephemeral=False)
+            await interaction.followup.send(result, file=discord_file)
 
         # Clean up the temporary image
         os.remove(img_path)
