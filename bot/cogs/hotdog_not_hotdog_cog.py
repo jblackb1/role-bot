@@ -53,10 +53,10 @@ class HotDogCog(commands.Cog):
         img_array /= 255.0
 
         # Predict
-        prediction = self.model.predict(img_array)[0][0]
+        prediction = self.model.predict(img_array)[0]
 
         # Interpret prediction
-        if prediction < 0.5:
+        if np.argmax(prediction) == 0:
             result = "Hotdog"
         else:
             result = "Not hotdog."
