@@ -19,9 +19,9 @@ class HotDogCog(commands.Cog):
         
         # Get the base directory and construct the path to the model file
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        data_path = os.path.join(base_dir, '..', '..', 'data')
-        model_path = os.path.join(data_path, 'hotdog_not_hotdog_model.h5')
-        logger.info(f'data_path:{data_path}, base_dir: {base_dir}, model_path: {model_path}')
+        config_path = os.path.join(base_dir, '..', '..', 'config')
+        model_path = os.path.join(config_path, 'hotdog_not_hotdog_model.h5')
+        logger.info(f'data_path:{config_path}, base_dir: {base_dir}, model_path: {model_path}')
 
         # Load the model
         self.model = load_model(model_path)
