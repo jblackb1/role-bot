@@ -47,7 +47,7 @@ class HotDogCog(commands.Cog):
         await attachment.save(img_path)
 
         # Preprocess the image
-        img = load_img(img_path, target_size=(128, 128))
+        img = load_img(img_path, target_size=(224, 224))
         img_array = img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0)
         img_array /= 255.0
